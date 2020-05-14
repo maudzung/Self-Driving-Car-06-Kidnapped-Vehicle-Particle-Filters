@@ -24,17 +24,17 @@ using std::vector;
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
   /**
-   * TODO: Set the number of particles. Initialize all particles to 
+   * Set the number of particles. Initialize all particles to 
    *   first position (based on estimates of x, y, theta and their uncertainties
    *   from GPS) and all weights to 1. 
-   * TODO: Add random Gaussian noise to each particle.
+   * Add random Gaussian noise to each particle.
    * NOTE: Consult particle_filter.h for more information about this method 
    *   (and others in this file).
    */
-  // if (is_initialized) {
-  //   return;
-  // }
-  num_particles = 1000;  // TODO: Set the number of particles
+  if (is_initialized) {
+    return;
+  }
+  num_particles = 1000;
 
   std::default_random_engine gen;
   std::normal_distribution<double> dist_x(x, std[0]);
@@ -61,7 +61,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 void ParticleFilter::prediction(double delta_t, double std_pos[], 
   double velocity, double yaw_rate) {
   /**
-   * TODO: Add measurements to each particle and add random Gaussian noise.
+   * Add measurements to each particle and add random Gaussian noise.
    * NOTE: When adding noise you may find std::normal_distribution 
    *   and std::default_random_engine useful.
    *  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
@@ -76,7 +76,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
   for(auto &p:particles){
     // if yaw_rate ~ 0. ==> do as normal
     if (fabs(yaw_rate) < 0.000001) {
-      // predict without Gaussian noise
       p.x += velocity * delta_t * cos(p.theta);
       p.y += velocity * delta_t * sin(p.theta);
     } else {
@@ -95,7 +94,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
 void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted, 
  vector<LandmarkObs>& observations) {
 /**
- * TODO: Find the predicted measurement that is closest to each 
+ * Find the predicted measurement that is closest to each 
  *   observed measurement and assign the observed measurement to this 
  *   particular landmark.
  * NOTE: this method will NOT be called by the grading code. But you will 
@@ -126,7 +125,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
  const vector<LandmarkObs> &observations, 
  const Map &map_landmarks) {
 /**
- * TODO: Update the weights of each particle using a mult-variate Gaussian 
+ * Update the weights of each particle using a mult-variate Gaussian 
  *   distribution. You can read more about this distribution here: 
  *   https://en.wikipedia.org/wiki/Multivariate_normal_distribution
  * NOTE: The observations are given in the VEHICLE'S coordinate system. 
@@ -188,7 +187,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
     for(unsigned int i=0; i < transformed_observations.size(); i++){
     // for(auto &trans_obser : transformed_observations){
       LandmarkObs trans_obser = transformed_observations[i];
-    // if no matching landmark then assign 0 prob for the particle
+    // if no matching landmark then set prob = 0. for the particle
       if(trans_obser.id == -1){
         prob = 0.0;
         break;
@@ -204,7 +203,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
         double delta_y_square = pow(trans_obser.y - nearest_lm.y, 2);
 
         prob *= nuy_norm * exp(-(delta_x_square / (2 * std_x_square) + delta_y_square / (2 * std_y_square)));
-      // std::cout << "prob: " << prob;
       }
     }
 
@@ -216,7 +214,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 void ParticleFilter::resample() {
   /**
-   * TODO: Resample particles with replacement with probability proportional 
+   * Resample particles with replacement with probability proportional 
    *   to their weight. 
    * NOTE: You may find std::discrete_distribution helpful here.
    *   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
