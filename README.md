@@ -17,24 +17,28 @@ or even [Windows 10 Bash on Ubuntu](https://www.howtogeek.com/249966/how-to-inst
 You can execute the `install-ubuntu.sh` to install uWebSocketIO.
 
 3. Once the install for uWebSocketIO is complete, the main program can be built and ran by doing the following from the project top directory.
-    ```shell script
-    mkdir build
-    cd build
-    cmake ..
-    make
-    ./particle_filter
-    ```
+
+```shell script
+mkdir build
+cd build
+cmake ..
+make
+./particle_filter
+```
+   
 Alternatively some scripts have been included to streamline this process, these can be leveraged by executing the 
 following in the top directory of the project:
-    ```shell script
-    ./clean.sh
-    ./build.sh
-    ./run.sh
-    ```
+
+```shell script
+./clean.sh
+./build.sh
+./run.sh
+```
+    
 ## Input & Output data notes
 
 ### Inputs to the Particle Filter
-You can find the inputs to the particle filter in the `data` directory.
+The inputs of the particle filter can be found in the `data` directory.
 
 ### The Map*
 `map_data.txt` includes the position of landmarks (in meters) on an arbitrary Cartesian coordinate system. Each row has three columns
@@ -87,13 +91,6 @@ OUTPUT: values provided by the c++ program to the simulator
 
 ["best_particle_sense_y"] <= list of sensed y positions
 
-
-Your job is to build out the methods in `particle_filter.cpp` until the simulator output says:
-
-```
-Success! Your particle filter passed!
-```
-
 ## Implementing the Particle Filter
 The directory structure of this repository is as follows:
 
@@ -119,3 +116,9 @@ ${ROOT}
 parameters `max_translation_error` and `max_yaw_error` in `src/main.cpp`.
 
 2. **Performance**: The particle filter should complete execution within the time of 100 seconds.
+
+Finally, the simulator output says:
+
+```
+Success! Your particle filter passed!
+```
